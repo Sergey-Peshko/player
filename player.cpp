@@ -58,6 +58,7 @@ Player::Player(QWidget *parent)
     , slider(0)
     , colorDialog(0)
 {
+    this->setMinimumSize(800,400);
 //! [create-objs]
     player = new QMediaPlayer(this);
     // owned by PlaylistModel
@@ -145,10 +146,10 @@ Player::Player(QWidget *parent)
     connect(colorButton, SIGNAL(clicked()), this, SLOT(showColorDialog()));
 
     removeFromPlaylistButton = new QPushButton(tr("Remove from PL"), this);
-    connect(removeFromPlaylistButton, SIGNAL(clicked()), this, SLOT(removeFromPlaylist()));
+    connect(removeFromPlaylistButton, SIGNAL(clicked()), this, SLOT(removeFromPlaylist()));    
 
     QBoxLayout *displayLayout = new QHBoxLayout;
-    displayLayout->addWidget(videoWidget);
+    displayLayout->addWidget(videoWidget, 2);
     displayLayout->addWidget(playlistView);
     displayLayout->addWidget(removeFromPlaylistButton);
 
