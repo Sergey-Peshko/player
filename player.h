@@ -80,6 +80,7 @@ signals:
     void fullScreenChanged(bool fullScreen);
 
 private slots:
+    void removeFromPlaylist();
     void helpDialog();
     void openFile();
     void openUrl();
@@ -121,6 +122,7 @@ private:
     QLabel *labelDuration;
     QPushButton *fullScreenButton;
     QPushButton *colorButton;
+    QPushButton *removeFromPlaylistButton;
     QDialog *colorDialog;
 
     QLabel *labelHistogram;

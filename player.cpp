@@ -144,9 +144,13 @@ Player::Player(QWidget *parent)
     colorButton->setEnabled(false);
     connect(colorButton, SIGNAL(clicked()), this, SLOT(showColorDialog()));
 
+    removeFromPlaylistButton = new QPushButton(tr("Remove from PL"), this);
+    connect(removeFromPlaylistButton, SIGNAL(clicked()), this, SLOT(removeFromPlaylist()));
+
     QBoxLayout *displayLayout = new QHBoxLayout;
-    displayLayout->addWidget(videoWidget, 2);
+    displayLayout->addWidget(videoWidget);
     displayLayout->addWidget(playlistView);
+    displayLayout->addWidget(removeFromPlaylistButton);
 
     QBoxLayout *controlLayout = new QHBoxLayout;
     controlLayout->setMargin(0);
@@ -322,6 +326,11 @@ void Player::addToPlaylist(const QList<QUrl> urls)
         else
             playlist->addMedia(url);
     }
+}
+
+void Player::removeFromPlaylist()
+{
+    playlist->removeMedia(playlistView->currentIndex().row());
 }
 
 void Player::durationChanged(qint64 duration)
