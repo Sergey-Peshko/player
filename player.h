@@ -80,6 +80,7 @@ signals:
     void fullScreenChanged(bool fullScreen);
 
 private slots:
+    void setNewPlaybackMode();
     void removeFromPlaylist();
     void helpDialog();
     void openFile();
@@ -123,6 +124,10 @@ private:
     QPushButton *fullScreenButton;
     QPushButton *colorButton;
     QPushButton *removeFromPlaylistButton;
+    QPushButton *openFileButton;
+    QPushButton *openUrlButton;
+    QLabel* labelPlaybackMode;
+    QPushButton *playbackModeButton;
     QDialog *colorDialog;
 
     QLabel *labelHistogram;

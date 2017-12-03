@@ -148,13 +148,35 @@ Player::Player(QWidget *parent)
     removeFromPlaylistButton = new QPushButton(tr("Remove from PL"), this);
     connect(removeFromPlaylistButton, SIGNAL(clicked()), this, SLOT(removeFromPlaylist()));    
 
+    labelPlaybackMode = new QLabel(this);
+    labelPlaybackMode->setText("Playback Mode:");
+    playbackModeButton = new QPushButton(tr("Sequential"), this);
+    connect(playbackModeButton, SIGNAL(clicked()), this, SLOT(setNewPlaybackMode()));
+
+    openFileButton = new QPushButton(tr("Open File"));
+    connect(openFileButton, SIGNAL(clicked()), this, SLOT(openFile()));
+
+    openUrlButton = new QPushButton(tr("Open Url"));
+    connect(openUrlButton, SIGNAL(clicked()), this, SLOT(openUrl()));
+
+    QBoxLayout *plControlLayout = new QVBoxLayout;
+    plControlLayout->setMargin(0);
+    plControlLayout->setSpacing(14);
+    plControlLayout->addWidget(openFileButton);
+    plControlLayout->addWidget(openUrlButton);
+    plControlLayout->addWidget(removeFromPlaylistButton);
+    plControlLayout->addStretch(1);
+
+
     QBoxLayout *displayLayout = new QHBoxLayout;
     displayLayout->addWidget(videoWidget, 2);
     displayLayout->addWidget(playlistView);
-    displayLayout->addWidget(removeFromPlaylistButton);
+    displayLayout->addLayout(plControlLayout);
 
     QBoxLayout *controlLayout = new QHBoxLayout;
     controlLayout->setMargin(0);
+    controlLayout->addWidget(labelPlaybackMode);
+    controlLayout->addWidget(playbackModeButton);
     controlLayout->addStretch(1);
     controlLayout->addWidget(controls);
     controlLayout->addStretch(1);
@@ -195,23 +217,14 @@ QMenuBar* Player::createMenu()
 {
     QMenu* fileMenu = new QMenu("File");
 
-    QAction* openFile = new QAction("Open File");
-    connect(openFile, SIGNAL(triggered(bool)), this, SLOT(openFile()));
-
-    QAction* openUrl = new QAction("Open Url");
-    connect(openUrl, SIGNAL(triggered(bool)), this, SLOT(openUrl()));
-
     QAction* savePl = new QAction("Save playlist");
     connect(savePl, SIGNAL(triggered(bool)), this, SLOT(savePlayList()));
 
     QAction* openPl = new QAction("Load playlist");
     connect(openPl, SIGNAL(triggered(bool)), this, SLOT(loadPlayList()));
 
-    fileMenu->addAction(openFile);
-    fileMenu->addAction(openUrl);
     fileMenu->addAction(savePl);
     fileMenu->addAction(openPl);
-
 
     QMenu* helpMenu = new QMenu("Help");
 
@@ -327,6 +340,43 @@ void Player::addToPlaylist(const QList<QUrl> urls)
         else
             playlist->addMedia(url);
     }
+}
+
+void Player::setNewPlaybackMode()
+{
+    qDebug() << "Mod is going to change";
+
+    switch (playlist->playbackMode()) {
+    case QMediaPlaylist::CurrentItemOnce:
+        playlist->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
+        playbackModeButton->setText("CurrentItemInLoop");
+        qDebug() << "Mod is CurrentItemInLoop";
+        break;
+    case QMediaPlaylist::CurrentItemInLoop:
+        playlist->setPlaybackMode(QMediaPlaylist::Sequential);
+        playbackModeButton->setText("Sequential");
+        qDebug() << "Mod is Sequential";
+        break;
+    case QMediaPlaylist::Sequential:
+        playlist->setPlaybackMode(QMediaPlaylist::Loop);
+        playbackModeButton->setText("Loop");
+        qDebug() << "Mod is Loop";
+        break;
+    case QMediaPlaylist::Loop:
+        playlist->setPlaybackMode(QMediaPlaylist::Random);
+        playbackModeButton->setText("Random");
+        qDebug() << "Mod is Random";
+        break;
+    case QMediaPlaylist::Random:
+        playlist->setPlaybackMode(QMediaPlaylist::CurrentItemOnce);
+        playbackModeButton->setText("CurrentItemOnce");
+        qDebug() << "Mod is CurrentItemOnce";
+        break;
+    default:
+        break;
+    }
+
+    return;
 }
 
 void Player::removeFromPlaylist()
