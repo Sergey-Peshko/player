@@ -143,6 +143,7 @@ Player::Player(QWidget *parent)
 
     colorButton = new QPushButton(tr("Color Options..."), this);
     colorButton->setEnabled(false);
+    colorButton->setVisible(false);
     connect(colorButton, SIGNAL(clicked()), this, SLOT(showColorDialog()));
 
     removeFromPlaylistButton = new QPushButton(tr("Remove from PL"), this);
